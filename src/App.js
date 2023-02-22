@@ -91,4 +91,3 @@ const styles = {
 };
 
 export default App;
-git;
