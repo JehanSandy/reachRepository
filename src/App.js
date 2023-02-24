@@ -1,4 +1,5 @@
 import React from "react";
+import Axios from "axios";
 import { FormControl, Button } from "react-bootstrap";
 
 // import componen
@@ -10,45 +11,72 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activities: [
-        { id: 1, name: "makan" },
-        { id: 2, name: "tidur" },
-        { id: 3, name: "coding" },
-        { id: 4, name: "mandi" },
-      ],
+      activities: [],
     };
   }
 
-  // componentDidMount() {
-  //   //hanya terpanggil sekali setelah render berjalan pertama kali
-  //   alert(`componen did mount`);
-  // }
+  fetchData = () => {
+    Axios.get("http://localhost:2000/activities").then((res) => {
+      this.setState({ activities: res.data });
+    });
+  };
+
+  componentDidMount() {
+    this.fetchData();
+  }
+  onCompleted = (id) => {
+    Axios.patch(`http://localhost:2000/activities/${id}`, {
+      isCompleted: true,
+    }).then((res) => {
+      this.fetchData();
+    });
+  };
 
   // componentWillUpdate() {
   //   alert(`componen update`);
   // }
-
-  //ini untuk get valur input yg di onclick
   onAdd = () => {
     let newTodo = this.refs.Todo.value;
-    let id = this.state.activities.length + 1;
 
-    //menyiapkan array untuk state yg baru
-    let temArr = [...this.state.activities];
-    //menambahkan data baru ke dalam array sementara "temArr"
-    temArr.push({ id, name: newTodo });
-    //mengganti state activities menjadi temArr, dimana temArr adalah array yg sudah di masukan data baru
-    this.setState({ activities: temArr });
-    //untuk mengosongkan kembali form input todo
-    this.refs.Todo.value = "";
+    // siapkan objek untuk push ke data base
+    let obj = {
+      name: newTodo,
+      isComplated: false,
+    };
+
+    // menambah data baru
+    Axios.post("http://localhost:2000/activities", obj).then((res) => {
+      this.fetchData();
+      this.refs.Todo.value = "";
+    });
   };
+  //ini untuk get valur input yg di onclick
+  // onAdd = () => {
+  //   let newTodo = this.refs.Todo.value;
+  //   let id = this.state.activities.length + 1;
+  //   console.log(newTodo);
+
+  //   //menyiapkan array untuk state yg baru
+  //   let temArr = [...this.state.activities];
+  //   //menambahkan data baru ke dalam array sementara "temArr"
+  //   temArr.push({ id, name: newTodo });
+  //   //mengganti state activities menjadi temArr, dimana temArr adalah array yg sudah di masukan data baru
+  //   this.setState({ activities: temArr });
+  //   //untuk mengosongkan kembali form input todo
+  //   this.refs.Todo.value = "";
+  // };
 
   onDelete = (id) => {
-    let tempArr = this.state.activities.filter((item) => {
-      return item.id !== id;
+    Axios.delete(`http://localhost:2000/activities/${id}`).then((res) => {
+      this.fetchData();
     });
-    this.setState({ activities: tempArr });
   };
+  // onDelete = (id) => {
+  //   let tempArr = this.state.activities.filter((item) => {
+  //     return item.id !== id;
+  //   });
+  //   this.setState({ activities: tempArr });
+  // };
 
   //looping untuk menampilkan TodoItem, di jadikan function
   showData = () => {
@@ -58,6 +86,7 @@ class App extends React.Component {
           data={item}
           key={item.id}
           delete={() => this.onDelete(item.id)}
+          complete={() => this.onCompleted(item.id)}
           // () => untuk mencegah function onDelete aktif terus sebelum di click
         />
       );
@@ -85,8 +114,9 @@ const styles = {
     padding: "1.5rem",
   },
   input: {
-    width: "35vh",
+    width: "25vh",
     display: "flex",
+    justifyContent: "space-between",
   },
 };
 

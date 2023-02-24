@@ -3,8 +3,8 @@ import { Button } from "react-bootstrap";
 
 class TodoItem extends React.Component {
   // componentWillUnmount() {
-    alert("component will unmount");
-  }
+  // alert("component will unmount");
+  // }
   render() {
     return (
       <div style={styles.container}>
@@ -19,7 +19,13 @@ class TodoItem extends React.Component {
           >
             Delete
           </Button>
-          <Button variant="outline-success">Complete</Button>
+          <Button
+            variant="outline-success"
+            onClick={this.props.complete}
+            disabled={this.props.data.isCompleted}
+          >
+            {this.props.data.isCompleted ? "Finis" : "Completed"}
+          </Button>
         </div>
       </div>
     );
