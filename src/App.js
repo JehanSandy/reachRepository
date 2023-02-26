@@ -18,6 +18,8 @@ class App extends React.Component {
   fetchData = () => {
     Axios.get("http://localhost:2000/activities").then((res) => {
       this.setState({ activities: res.data });
+      console.log(res);
+      console.log(res.data);
     });
   };
 
