@@ -4,7 +4,7 @@ import { FormControl, Button } from "react-bootstrap";
 
 // import componen
 import TodoItem from "./component/todoItem";
-
+import NaviBar from "./component/navBar";
 // ini class componen
 class App extends React.Component {
   //extends inhirend class app di buat dengan cetakan kelas React.componen
@@ -96,6 +96,7 @@ class App extends React.Component {
   render() {
     return (
       <div style={styles.container}>
+        <NaviBar />
         <h1>Todo List</h1>
         {this.showData()}
         <div style={styles.input}>
