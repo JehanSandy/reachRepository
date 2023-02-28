@@ -7,7 +7,7 @@ const todo = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "GET_DATA": //connection dari return action type : "GET_DATA"
       return {
-        ...state,
+        ...state, //ini harus di tulis agar data tidak terganti scr keseluruhan
         activities: action.payload, //connect activities[] di ganti dengan cation.payload dimana payload membawa (data) dari parameter getData
       };
     default:
