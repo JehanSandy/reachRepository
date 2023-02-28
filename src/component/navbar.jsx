@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Button, Nav, Form, FormControl } from "react-bootstrap";
+import { Navbar } from "react-bootstrap";
 
 // connect react redux
 import { connect } from "react-redux";

@@ -1,41 +1,26 @@
 import React from "react";
-import Axios from "axios";
 import { FormControl, Button } from "react-bootstrap";
 
 // import react-redux
-import { Connect } from "react-redux";
+import { connect } from "react-redux";
 // import componen
 import TodoItem from "../component/todoItem";
 
 // import action
-import { getData } from "../redux/action";
-import { connect } from "react-redux";
+import { getData, addData, delData, Complete } from "../redux/action";
 
 // ini class componen
 class TodoPages extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     activities: [],
-  //   };
-  // }
-
   fetchData = () => {
-    Axios.get("http://localhost:2000/activities").then((res) => {
-      this.props.getData(res.data); //di kirim ke getData get data punya properti type dan peyload => payload membawa data
-      // this.setState({ activities: res.data });
-    });
+    // Axios.get("http://localhost:2000/activities").then((res) => {
+    this.props.getData();
   };
 
   componentDidMount() {
     this.fetchData();
   }
   onCompleted = (id) => {
-    Axios.patch(`http://localhost:2000/activities/${id}`, {
-      isCompleted: true,
-    }).then((res) => {
-      this.fetchData();
-    });
+    this.props.Complete(id);
   };
 
   onAdd = () => {
@@ -43,19 +28,15 @@ class TodoPages extends React.Component {
     // siapkan objek untuk push ke data base
     let obj = {
       name: newTodo,
-      isComplated: false,
+      isCompleted: false,
     };
     // menambah data baru
-    Axios.post("http://localhost:2000/activities", obj).then((res) => {
-      this.fetchData();
-      this.refs.Todo.value = "";
-    });
+    this.props.addData(obj);
+    this.refs.Todo.value = "";
   };
 
   onDelete = (id) => {
-    Axios.delete(`http://localhost:2000/activities/${id}`).then((res) => {
-      this.fetchData();
-    });
+    this.props.delData(id);
   };
 
   //looping untuk menampilkan TodoItem, di jadikan function
@@ -108,4 +89,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getData })(TodoPages);
+export default connect(mapStateToProps, {
+  getData,
+  addData,
+  delData,
+  Complete,
+})(TodoPages);

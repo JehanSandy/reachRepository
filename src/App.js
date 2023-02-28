@@ -1,6 +1,6 @@
 import React from "react";
 
-// impor componen
+// import component
 import TodoPages from "./Pages/todoPages";
 import NaviBar from "./component/navbar";
 
