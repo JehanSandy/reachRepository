@@ -3,7 +3,6 @@ import Axios from "axios";
 import { FormControl, Button } from "react-bootstrap";
 
 // import react-redux
-import { Connect } from "react-redux";
 // import componen
 import TodoItem from "../component/todoItem";
 
@@ -24,6 +23,8 @@ class TodoPages extends React.Component {
     Axios.get("http://localhost:2000/activities").then((res) => {
       this.props.getData(res.data); //di kirim ke getData get data punya properti type dan peyload => payload membawa data
       // this.setState({ activities: res.data });
+      console.log(res);
+      console.log(res.data);
     });
   };
 
